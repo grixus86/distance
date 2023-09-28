@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Address Hints</title>
+  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAnNfg8h4BbLpDoh1iqmLkVRI88OYK1dRo"></script>
+</head>
+<body>
+  <h1>Address Hints</h1>
+
+  <input type="text" id="address" placeholder="Enter address">
+  <button type="button" onclick="getAddressHints()">Get Address Hints</button>
+
+  <ul id="hints"></ul>
+
+  <script>
+    function getAddressHints() {
+      var address = document.getElementById('address').value;
+
+      // Create a PlacesService object.
+      var placesService = new google.maps.PlacesService();
+
+      // Create a PlacesRequest object.
+      var placesRequest = {
+        query: address,
+        fields: ['name', 'formatted_address']
+      };
+
+      // Find the places that match the query.
+      placesService.findPlaceFromQuery(placesRequest, function(results, status) {
+        if (status === google.maps.PlacesStatus.OK) {
+          // Display the hints in the list element.
+          var hints = document.getElementById('hints');
+          hints.innerHTML = '';
+          for (var i = 0; i < results.length; i++) {
+            var hint = document.createElement('li');
+            hint.innerHTML = results[i].formatted_address;
+            hints.appendChild(hint);
+          }
+        } else {
+          // Display an error message.
+          document.getElementById('hints').innerHTML = 'Failed to get address hints.';
+        }
+      });
+    }
+  </script>
+</body>
+</html>
